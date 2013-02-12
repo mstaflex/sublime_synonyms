@@ -13,7 +13,7 @@ class SynonymManager(object):
     def get_synonyms(self, word, callback=None, asynchronous=False):
         if asynchronous:
             thread.start_new_thread(self.threaded_api_request, (word, callback,))
-        else:/Users/mflex/Library/Application Support/Sublime Text 2/Packages/User/user.sublime-commands
+        else:
             return self._get_syns(word)
 
     def threaded_api_request(self, word, callback):

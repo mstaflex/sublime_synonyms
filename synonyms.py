@@ -16,7 +16,7 @@ class SynonymsCommand(sublime_plugin.TextCommand):
 
         self.view.sel().add(wordRegion)
 
-        synManager = synonyms.SynonymManager()
+        synManager = synonyms_request.SynonymManager()
         syns = synManager.get_synonyms(currentWord)
 
         self.region = wordRegion
@@ -34,4 +34,4 @@ class SynonymsCommand(sublime_plugin.TextCommand):
             startloc = self.view.sel()[-1].end()
             self.view.insert(edit, startloc, self.syns[choice])
             self.view.end_edit(edit)
-# creature 
+# creature
