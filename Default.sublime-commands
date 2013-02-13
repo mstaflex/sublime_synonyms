@@ -1,0 +1,4 @@
+[
+    { "caption": "Synonyms", "command": "synonyms" },
+    { "caption": "Change synonyms API key", "command": "change_synonyms_key" }
+]
