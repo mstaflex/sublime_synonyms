@@ -62,8 +62,7 @@ class SynonymsCommand(sublime_plugin.TextCommand):
         self.callback(syns)  # synonyms_request is prepared for async requests
 
     def callback(self, syns):
-        self.syns = syns
-        if type(syns) != list:
+        if type(syns) != dict:
             if syns == 500:
                 sublime.message_dialog(MESSAGE_WRONG_KEY)
                 return
@@ -72,15 +71,29 @@ class SynonymsCommand(sublime_plugin.TextCommand):
                 return
         if len(syns) == 0:
             sublime.message_dialog(MESSAGE_NO_SYN_FOUND)
-        self.view.window().show_quick_panel(syns, self.insert_syn, sublime.MONOSPACE_FONT)
+
+        word_list = []
+        allowed_categories = ['noun', 'verb', 'adjective', 'adverb']
+        for category in allowed_categories:
+            if category in syns:
+                word_list.append(category[0].upper() + category[1:] + ':')
+                for word in syns[category]:
+                    word_list.append(' ' + word)
+        self.syns = word_list
+        self.view.window().show_quick_panel(word_list, self.insert_syn, sublime.MONOSPACE_FONT)
 
     def insert_syn(self, choice):
             if choice == -1:
+                return
+            selected_word = self.syns[choice]
+            selected_word = ''.join(e for e in selected_word if e.isalnum())
+            if selected_word.lower() in \
+                ['noun', 'adjective', 'verb', 'adverb']:
                 return
             region = get_selected_region(self.view)
             edit = self.view.begin_edit()
             self.view.erase(edit, region)
             startloc = self.view.sel()[-1].end()
-            self.view.insert(edit, startloc, self.syns[choice])
+            self.view.insert(edit, startloc, selected_word)
             self.view.end_edit(edit)
 # puppet

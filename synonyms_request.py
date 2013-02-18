@@ -21,7 +21,7 @@ class SynonymManager(object):
         callback(synonym_list)
 
     def _get_syns(self, word):
-        synonym_list = []
+        synonym_list = {}
         request = '/api/%s/%s/%s/%s' % \
                     (self.api_version, self.key, word, self.coding)
         #sublime.message_dialog(request)
@@ -31,10 +31,11 @@ class SynonymManager(object):
         if response.status == 200:
             data = response.read()
             if self.coding == 'json':
-                parsed_request = json.loads(data)
-                if u'noun' in parsed_request and \
-                    u'syn' in parsed_request[u'noun']:
-                    synonym_list = parsed_request[u'noun'][u'syn']
+                response = json.loads(data)
+                for key in response:
+                    if key in [u'noun', u'verb', u'adjective', u'adverb']:
+                        if u'syn' in response[key]:
+                            synonym_list[key] = response[key][u'syn']
         else:
             synonym_list = response.status
         conn.close()
