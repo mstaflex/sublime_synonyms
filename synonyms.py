@@ -66,11 +66,9 @@ class SynonymsCommand(sublime_plugin.TextCommand):
             if syns == 500:
                 sublime.message_dialog(MESSAGE_WRONG_KEY)
                 return
-            elif syns == 404:
+            else:  # 404 or anathing else
                 sublime.message_dialog(MESSAGE_NO_SYN_FOUND)
                 return
-        if len(syns) == 0:
-            sublime.message_dialog(MESSAGE_NO_SYN_FOUND)
 
         word_list = []
         allowed_categories = ['noun', 'verb', 'adjective', 'adverb']
