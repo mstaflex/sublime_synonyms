@@ -88,10 +88,14 @@ class SynonymsCommand(sublime_plugin.TextCommand):
             if selected_word.lower() in \
                 ['noun', 'adjective', 'verb', 'adverb']:
                 return
+            currentWord = get_selected_word(self.view)
             region = get_selected_region(self.view)
             edit = self.view.begin_edit()
             self.view.erase(edit, region)
             startloc = self.view.sel()[-1].end()
+            # copy capital first letters
+            if currentWord[0].isupper():
+                selected_word = selected_word[0].upper() + selected_word[1:]
             self.view.insert(edit, startloc, selected_word)
             self.view.end_edit(edit)
 # puppet
